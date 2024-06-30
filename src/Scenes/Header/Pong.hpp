@@ -328,10 +328,27 @@ class Pong : public Scene
             }
 
             if (game.ball.position.x - game.ball.radius <= 0) {
-                game.ball.position.x = game.ball.radius;
+                // Player scores
+                game.score.player++;
+
+                float angle = PI / 4;
+
+                game.ball.direction = (Vector2){ cosf(angle), sinf(angle) };
+                game.ball.direction = NormalizeVector2(game.ball.direction);
+
+
+                game.ball.position = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
                 game.ball.direction.x *= -1;
             } else if (game.ball.position.x + game.ball.radius >= GetScreenWidth()) {
-                game.ball.position.x = GetScreenWidth() - game.ball.radius;
+                // AI scores
+                game.score.ai++;
+
+                float angle = PI / 4;
+
+                game.ball.direction = (Vector2){ cosf(angle), sinf(angle) };
+                game.ball.direction = NormalizeVector2(game.ball.direction);
+
+                game.ball.position = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
                 game.ball.direction.x *= -1;
             }
 
