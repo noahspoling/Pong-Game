@@ -85,6 +85,7 @@ Vector2 NormalizeVector2(Vector2 v)
     return v;
 }
 
+
 class Pong : public Scene
 {
 public:
@@ -377,82 +378,7 @@ protected: // Can only be accessed through the Scene Manager via Update() per fr
         default:
             break;
         }
-
-        // Ball collision with walls
-        if (game.ball.position.y - game.ball.radius <= 0)
-        {
-            PlaySound(hitSound);
-
-            game.ball.position.y = game.ball.radius;
-            game.ball.direction.y *= -1;
-        }
-        else if (game.ball.position.y + game.ball.radius >= GetScreenHeight())
-        {
-            PlaySound(hitSound);
-
-            game.ball.position.y = GetScreenHeight() - game.ball.radius;
-            game.ball.direction.y *= -1;
-        }
-
-        if (game.ball.position.x - game.ball.radius <= 0)
-        {
-            PlaySound(scoreSound);
-
-            // Player scores
-            game.score.player++;
-
-
-            int randomIndex = rand() % (sizeof(preferredAngles) / sizeof(preferredAngles[0]));
-            angle = preferredAngles[randomIndex] * (PI / 180.0f);
-
-            game.ball.direction = (Vector2){cosf(angle), sinf(angle)};
-            game.ball.direction = NormalizeVector2(game.ball.direction);
-
-            game.ball.position = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
-            game.ball.direction.x *= -1;
-        }
-        else if (game.ball.position.x + game.ball.radius >= GetScreenWidth())
-        {
-            PlaySound(scoreSound);
-
-            // AI scores
-            game.score.ai++;
-
-            int randomIndex = rand() % (sizeof(preferredAngles) / sizeof(preferredAngles[0]));
-            angle = preferredAngles[randomIndex] * (PI / 180.0f);
-
-            game.ball.direction = (Vector2){cosf(angle), sinf(angle)};
-            game.ball.direction = NormalizeVector2(game.ball.direction);
-
-            game.ball.position = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
-            game.ball.direction.x *= -1;
-        }
-
-        // Ball collision with paddles
-        if (CheckCollisionCircleRec(game.ball.position, game.ball.radius, (Rectangle){game.player.position.x, game.player.position.y, game.player.size.x, game.player.size.y}))
-        {
-            PlaySound(hitSound);
-
-            game.ball.position.x = game.player.position.x + game.player.size.x + game.ball.radius; // Adjust position
-            game.ball.direction.x *= -1;
-
-            // Reflect based on paddle hit position
-            float offset = (game.ball.position.y - game.player.position.y) / game.player.size.y;
-            game.ball.direction.y = offset - 0.5f; // Reflect angle adjustment
-            game.ball.direction = NormalizeVector2(game.ball.direction);
-        }
-        else if (CheckCollisionCircleRec(game.ball.position, game.ball.radius, (Rectangle){game.ai.position.x, game.ai.position.y, game.ai.size.x, game.ai.size.y}))
-        {
-            PlaySound(hitSound);
-
-            game.ball.position.x = game.ai.position.x - game.ball.radius; // Adjust position
-            game.ball.direction.x *= -1;
-
-            // Reflect based on paddle hit position
-            float offset = (game.ball.position.y - game.ai.position.y) / game.ai.size.y;
-            game.ball.direction.y = offset - 0.5f; // Reflect angle adjustment
-            game.ball.direction = NormalizeVector2(game.ball.direction);
-        }
+        checkAllCollisions();
     }
 
     void render() override
@@ -474,6 +400,85 @@ protected: // Can only be accessed through the Scene Manager via Update() per fr
     void deInit() override {}
 
 private:
+    void checkAllCollisions() 
+    {
+                // Ball collision with walls
+            if (game.ball.position.y - game.ball.radius <= 0)
+            {
+                PlaySound(hitSound);
+
+                game.ball.position.y = game.ball.radius;
+                game.ball.direction.y *= -1;
+            }
+            else if (game.ball.position.y + game.ball.radius >= GetScreenHeight())
+            {
+                PlaySound(hitSound);
+
+                game.ball.position.y = GetScreenHeight() - game.ball.radius;
+                game.ball.direction.y *= -1;
+            }
+
+            if (game.ball.position.x - game.ball.radius <= 0)
+            {
+                PlaySound(scoreSound);
+
+                // Player scores
+                game.score.player++;
+
+
+                int randomIndex = rand() % (sizeof(preferredAngles) / sizeof(preferredAngles[0]));
+                angle = preferredAngles[randomIndex] * (PI / 180.0f);
+
+                game.ball.direction = (Vector2){cosf(angle), sinf(angle)};
+                game.ball.direction = NormalizeVector2(game.ball.direction);
+
+                game.ball.position = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
+                game.ball.direction.x *= -1;
+            }
+            else if (game.ball.position.x + game.ball.radius >= GetScreenWidth())
+            {
+                PlaySound(scoreSound);
+
+                // AI scores
+                game.score.ai++;
+
+                int randomIndex = rand() % (sizeof(preferredAngles) / sizeof(preferredAngles[0]));
+                angle = preferredAngles[randomIndex] * (PI / 180.0f);
+
+                game.ball.direction = (Vector2){cosf(angle), sinf(angle)};
+                game.ball.direction = NormalizeVector2(game.ball.direction);
+
+                game.ball.position = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
+                game.ball.direction.x *= -1;
+            }
+
+            // Ball collision with paddles
+            if (CheckCollisionCircleRec(game.ball.position, game.ball.radius, (Rectangle){game.player.position.x, game.player.position.y, game.player.size.x, game.player.size.y}))
+            {
+                PlaySound(hitSound);
+
+                game.ball.position.x = game.player.position.x + game.player.size.x + game.ball.radius; // Adjust position
+                game.ball.direction.x *= -1;
+
+                // Reflect based on paddle hit position
+                float offset = (game.ball.position.y - game.player.position.y) / game.player.size.y;
+                game.ball.direction.y = offset - 0.5f; // Reflect angle adjustment
+                game.ball.direction = NormalizeVector2(game.ball.direction);
+            }
+            else if (CheckCollisionCircleRec(game.ball.position, game.ball.radius, (Rectangle){game.ai.position.x, game.ai.position.y, game.ai.size.x, game.ai.size.y}))
+            {
+                PlaySound(hitSound);
+
+                game.ball.position.x = game.ai.position.x - game.ball.radius; // Adjust position
+                game.ball.direction.x *= -1;
+
+                // Reflect based on paddle hit position
+                float offset = (game.ball.position.y - game.ai.position.y) / game.ai.size.y;
+                game.ball.direction.y = offset - 0.5f; // Reflect angle adjustment
+                game.ball.direction = NormalizeVector2(game.ball.direction);
+            }
+    }
+
     Game game;
     Sound hitSound;
     Sound scoreSound;
