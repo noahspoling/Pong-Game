@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/Game_test.dir/src/main.cpp.o -o Game_test_Debug  _deps/raylib-build/raylib/libraylib.a -lm -lpthread /usr/lib/aarch64-linux-gnu/libOpenGL.so /usr/lib/aarch64-linux-gnu/libGLX.so /usr/lib/aarch64-linux-gnu/libGLU.so _deps/raylib-build/raylib/external/glfw/src/libglfw3.a /usr/lib/aarch64-linux-gnu/librt.a -lm -ldl
