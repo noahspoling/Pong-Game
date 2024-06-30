@@ -112,7 +112,7 @@ protected: // Can only be accessed through the Scene Manager via Update() per fr
         // Ball initialization
         game.ball.position = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
 
-        game.ball.velocity = {400.0f, 400.0f};
+        game.ball.velocity = {500.0f, 500.0f};
         game.ball.radius = 10;
         game.ball.color = RED;
         game.ball.acceleration = {10, 10};
@@ -123,7 +123,23 @@ protected: // Can only be accessed through the Scene Manager via Update() per fr
         game.player.color = BLUE;
 
         game.ai.position = {(float)GetScreenWidth() - 40, (float)GetScreenHeight() / 2};
-        game.ai.speed = {0, 15.0f};
+        game.ai.speed = {0, 5.0f};
+        switch (game.aiType)
+        {
+        case EASY:
+            game.ai.speed = {0, 5.0f};
+            break;
+        case MEDIUM:
+            game.ai.speed = {0, 10.0f};
+            break;
+
+        case HARD:
+            game.ai.speed = {0, 15.0f};
+            break;
+        
+        default:
+            break;
+        }
         game.ai.size = {20, 100};
         game.ai.color = GREEN;
 
@@ -324,7 +340,7 @@ protected: // Can only be accessed through the Scene Manager via Update() per fr
             game.ai.position.y = game.player.position.y;
             break;
         case EASY:
-            if(framesCounter % 2 == 0) // AI recalculates every 5 frames
+            if(framesCounter % 1 == 0) // AI recalculates every 5 frames
             {
                 if (game.ball.position.y < game.ai.position.y)
                 {
@@ -348,7 +364,7 @@ protected: // Can only be accessed through the Scene Manager via Update() per fr
             }
             break;
         case HARD:
-            if (framesCounter % 2 == 0) // AI recalculates every 5 frames
+            if (framesCounter % 1 == 0) // AI recalculates every 5 frames
                 if (game.ball.position.y < game.ai.position.y)
                 {
                     game.ai.position.y -= game.ai.speed.y;
@@ -447,8 +463,8 @@ protected: // Can only be accessed through the Scene Manager via Update() per fr
         sprintf(scoreTextPlayer, "%i", game.score.player);
         sprintf(scoreTextAI, "%i", game.score.ai);
 
-        DrawText(scoreTextPlayer, GetScreenWidth() / 2 - 50, 20, 20, BLACK);
-        DrawText(scoreTextAI, GetScreenWidth() / 2 + 50, 20, 20, BLACK);
+        DrawText(scoreTextPlayer, GetScreenWidth() / 2 + 50, 20, 20, BLACK);
+        DrawText(scoreTextAI, GetScreenWidth() / 2 - 50, 20, 20, BLACK);
 
         DrawCircleV(game.ball.position, game.ball.radius, game.ball.color);
         DrawRectangleV(game.player.position, game.player.size, game.player.color);

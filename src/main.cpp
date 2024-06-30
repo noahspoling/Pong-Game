@@ -20,7 +20,7 @@ int main()
 
     while (!WindowShouldClose())
     {
-        #ifdef NDEBUG
+        #ifdef DEBUG_STEP // Build target for step debugging
             TraceLog(LOG_INFO, "New Frame");
         #endif
 
