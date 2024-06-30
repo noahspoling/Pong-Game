@@ -105,12 +105,12 @@ class Pong : public Scene
             // Ball initialization
             game.ball.position = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
             
-            game.ball.velocity = {250.0f, 250.0f};
+            game.ball.velocity = {500.0f, 500.0f};
             game.ball.radius = 10;
             game.ball.color = RED;
 
             game.player.position = {20, (float)GetScreenHeight() / 2};
-            game.player.speed = {0, 5.0f};
+            game.player.speed = {0, 10.0f};
             game.player.size = {20, 100};
             game.player.color = BLUE;
 
@@ -353,13 +353,35 @@ class Pong : public Scene
             }
 
             // Ball collision with paddles
-            if (CheckCollisionCircleRec(game.ball.position, game.ball.radius, (Rectangle){ game.player.position.x, game.player.position.y, game.player.size.x, game.player.size.y }) ||
-                CheckCollisionCircleRec(game.ball.position, game.ball.radius, (Rectangle){ game.ai.position.x, game.ai.position.y, game.ai.size.x, game.ai.size.y })) {
+            if (CheckCollisionCircleRec(game.ball.position, game.ball.radius, (Rectangle){game.player.position.x, game.player.position.y, game.player.size.x, game.player.size.y})) {
+                game.ball.position.x = game.player.position.x + game.player.size.x + game.ball.radius; // Adjust position
                 game.ball.direction.x *= -1;
+
+                // Reflect based on paddle hit position
+                float offset = (game.ball.position.y - game.player.position.y) / game.player.size.y;
+                game.ball.direction.y = offset - 0.5f; // Reflect angle adjustment
+                game.ball.direction = NormalizeVector2(game.ball.direction);
+            } else if (CheckCollisionCircleRec(game.ball.position, game.ball.radius, (Rectangle){game.ai.position.x, game.ai.position.y, game.ai.size.x, game.ai.size.y})) {
+                game.ball.position.x = game.ai.position.x - game.ball.radius; // Adjust position
+                game.ball.direction.x *= -1;
+
+                // Reflect based on paddle hit position
+                float offset = (game.ball.position.y - game.ai.position.y) / game.ai.size.y;
+                game.ball.direction.y = offset - 0.5f; // Reflect angle adjustment
+                game.ball.direction = NormalizeVector2(game.ball.direction);
             }
         }
 
         void render() override {
+            char scoreTextPlayer[20]; 
+            char scoreTextAI[20];
+
+            sprintf(scoreTextPlayer, "%i", game.score.player);
+            sprintf(scoreTextAI, "%i", game.score.ai);
+
+            DrawText(scoreTextPlayer, GetScreenWidth() / 2 - 50, 20, 20, BLACK);
+            DrawText(scoreTextAI, GetScreenWidth() / 2 + 50, 20, 20, BLACK);
+
             DrawCircleV(game.ball.position, game.ball.radius, game.ball.color);
             DrawRectangleV(game.player.position, game.player.size, game.player.color);
             DrawRectangleV(game.ai.position, game.ai.size, game.ai.color);
