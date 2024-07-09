@@ -16,16 +16,11 @@ if (NOT raylib_FOUND)
   FetchContent_Declare(
     raylib
     URL https://github.com/raysan5/raylib/archive/refs/tags/${RAYLIB_VERSION}.tar.gz
+    SOURCE_DIR "${CMAKE_BINARY_DIR}/_deps/raylib-src"
+    BINARY_DIR "${CMAKE_BINARY_DIR}/_deps/raylib-build"
   )
-  FetchContent_GetProperties(raylib)
-  if (NOT raylib_POPULATED)
-    set(FETCHCONTENT_QUIET NO)
-    FetchContent_Populate(raylib)
-    set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-    add_subdirectory(${raylib_SOURCE_DIR} ${raylib_BINARY_DIR})
-  endif()
+  FetchContent_MakeAvailable(raylib)
 endif()
-
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
@@ -38,7 +33,7 @@ file(GLOB_RECURSE SOURCE_FILES
 )
 
 # Add the executable
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} )
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 target_link_libraries(${PROJECT_NAME} raylib)
 
@@ -50,16 +45,18 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   # Add any other debug-specific configurations here
 endif()
 
-
 # Web Configurations
-if (${PLATFORM} STREQUAL "Web")
-    # Tell Emscripten to build an example.html file.
-    set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".html")
+# if (DEFINED PLATFORM AND PLATFORM STREQUAL "Web")
+#     # Tell Emscripten to build an example.html file.
+#     set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".html")
 
-    # Additional flags for targeting WebAssembly
-    set(CMAKE_EXECUTABLE_SUFFIX ".html") # Ensures the output is an HTML file that loads the WASM
-    set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-s WASM=1 -s USE_GLFW=3 -s ALLOW_MEMORY_GROWTH=1")
-endif()
+#     # Additional flags for targeting WebAssembly
+#     set(CMAKE_EXECUTABLE_SUFFIX ".html") # Ensures the output is an HTML file that loads the WASM
+#     set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-s WASM=1 -s USE_GLFW=3 -s ALLOW_MEMORY_GROWTH=1 -s FULL_ES3=1")
+
+#     # Link GLFW and other necessary libraries
+#     target_link_libraries(${PROJECT_NAME} glfw)
+# endif()
 
 # Checks if OSX and links appropriate frameworks (Only required on MacOS)
 if (APPLE)

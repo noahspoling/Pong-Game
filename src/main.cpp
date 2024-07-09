@@ -2,7 +2,9 @@
 
 #include "Util/SceneManager.hpp"
 #include "Scenes/Scene.hpp"
+#include "Scenes/Header/MainMenu.hpp"
 #include "Scenes/Header/Pong.hpp"
+
 
 const int screenWidth = 1280;
 const int screenHeight = 720;
@@ -11,10 +13,11 @@ int main()
 {
     InitWindow(screenWidth, screenHeight, "Game Title");
     InitAudioDevice();
-    SetTargetFPS(30);
+    SetTargetFPS(60);
 
+    MainMenu *mainMenu = new MainMenu();
     Pong *pong = new Pong();
-    SceneManager::LoadScene(pong);
+    SceneManager::LoadScene(mainMenu);
 
 
 
@@ -37,7 +40,7 @@ int main()
             #ifdef DEBUG
                 TraceLog(LOG_INFO, "Scene not loaded");
             #endif
-            SceneManager::LoadScene(pong);
+            SceneManager::LoadScene(mainMenu);
         }
 
         //DrawText("Congrats! You created your first window!", 10, 10, 20, DARKGRAY);

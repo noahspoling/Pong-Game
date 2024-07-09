@@ -9,10 +9,10 @@
 float angle;
 const int preferredAngles[] = {45, 135, 225, 315};
 
-struct Ball; // Forward declaration of Ball, getting an error on Game struct
+// struct Ball; // Forward declaration of Ball, getting an error on Game struct
 
-typedef enum Action
-{ // Enum for player and AI actions to separate input from update logic
+typedef enum Action // Enum for player and AI actions to separate input from update logic
+{ 
     UP,
     DOWN,
     NONE
@@ -113,18 +113,18 @@ protected: // Can only be accessed through the Scene Manager via Update() per fr
         // Ball initialization
         game.ball.position = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
 
-        game.ball.velocity = {500.0f, 500.0f};
+        game.ball.velocity = {1000.0f, 1000.0f};
         game.ball.radius = 10;
         game.ball.color = RED;
         game.ball.acceleration = {10, 10};
 
         game.player.position = {20, (float)GetScreenHeight() / 2};
-        game.player.speed = {0, 15.0f};
+        game.player.speed = {0, 8.0f};
         game.player.size = {20, 100};
         game.player.color = BLUE;
 
         game.ai.position = {(float)GetScreenWidth() - 40, (float)GetScreenHeight() / 2};
-        game.ai.speed = {0, 5.0f};
+        game.ai.speed = {0, 8.0f};
         switch (game.aiType)
         {
         case EASY:

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Wasm Game</title>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <script>
+        // Load and initialize your Wasm game module here
+        // For example:
+        // const gameModule = require('./game.wasm');
+        // const game = new gameModule.Game();
+
+        // Add your game logic and rendering code here
+
+        // Example: Render a simple message on the canvas
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.font = '30px Arial';
+        ctx.fillText('Welcome to the Wasm Game!', 200, 300);
+    </script>
+</body>
+</html>
